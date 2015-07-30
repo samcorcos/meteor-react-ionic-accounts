@@ -1,4 +1,23 @@
+let Transition = React.addons.CSSTransitionGroup;
+
 AppBody = React.createClass({
+  getInitialState() {
+    return {
+      modal: false
+    }
+  },
+  ionModal(setting) {
+    this.setState({
+      modal: (
+        <IonModal>
+          <div className="h1 title">{setting}</div>
+          <button onClick={ () => this.setState({modal:false}) } className="button button-icon active">
+            <i className="icon ion-ios-close-empty"></i>
+          </button>
+        </IonModal>
+      )
+    })
+  },
   render() {
     return (
       <div className="ionic-body">
@@ -11,10 +30,15 @@ AppBody = React.createClass({
         <div className="view">
           <div className="scroll-content ionic-scroll">
             <div className="content overflow-scroll has-header">
-              <ReactRouter.RouteHandler />
+              <ReactRouter.RouteHandler ionModal={this.ionModal}/>
             </div>
           </div>
         </div>
+
+        {this.state.modal ? <Backdrop /> : false}
+        <Transition transitionName="modal">
+          {this.state.modal}
+        </Transition>
       </div>
     )
   }
